@@ -38,4 +38,12 @@ logging:
   level:
     org.springframework.ai: DEBUG
     org.springframework.web.servlet.mvc.method.annotation.SseEmitter: DEBUG
-    com.example: DEBUG 
+    com.example: DEBUG
+    com.example.mcpserver.client: DEBUG
+    # Enable detailed logging for Feign clients
+    feign: DEBUG
+    feign.client: DEBUG
+
+# OpenWeatherMap configuration
+openweathermap:
+  api-key: ${OPENWEATHERMAP_API_KEY:replace-with-your-api-key} 

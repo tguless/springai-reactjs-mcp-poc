@@ -43,6 +43,13 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <!-- OpenFeign for API clients -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+
         <!-- Spring AI dependencies -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
