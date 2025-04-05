@@ -1,0 +1,41 @@
+server:
+  port: 8092
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: mcp-server-demo
+  ai:
+    mcp:
+      server:
+        name: mcp-server-demo
+        version: 1.0.0
+        type: SYNC
+        sse-message-endpoint: /mcp/message
+        resource-change-notification: true
+        tool-change-notification: true
+        prompt-change-notification: true
+        heartbeat-interval: 30s
+        timeout: 300s
+    openai:
+      api-key: ${OPENAI_API_KEY:demo-key-replace-with-actual}
+  web:
+    cors:
+      allowed-origins: '*'
+
+# Health monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    org.springframework.ai: DEBUG
+    org.springframework.web.servlet.mvc.method.annotation.SseEmitter: DEBUG
+    com.example: DEBUG 

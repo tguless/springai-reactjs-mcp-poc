@@ -1,0 +1,42 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: mcp-client-demo
+  ai:
+    anthropic:
+      api-key: ${ANTHROPIC_API_KEY:demo-key-replace-with-actual}
+      model: claude-3-7-sonnet-20250219
+      options:
+        temperature: 0.7
+        max-tokens: 4000
+    mcp:
+      client:
+        enabled: true
+        name: mcp-client-demo
+        version: 1.0.0
+        type: SYNC
+        request-timeout: 30s
+        sse:
+          connections:
+            local-server:
+              url: http://localhost:8092/api
+      # Disable embedded server since we're using the standalone mcp-server-demo
+      server:
+        enabled: false
+  thymeleaf:
+    cache: false
+  web:
+    resources:
+      static-locations: classpath:/static/
+      cache:
+        period: 0
+
+# Logging Configuration
+logging:
+  level:
+    org.springframework.ai: DEBUG
+    com.example: DEBUG
+    org.springframework.web.reactive.function.client: DEBUG
+    io.modelcontextprotocol: TRACE 

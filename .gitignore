@@ -1,0 +1,71 @@
+# Node.js
+mcp-client-demo/node_modules
+*/node_modules
+npm-debug.log
+yarn-error.log
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.logs
+*.log
+hs_err_pid*
+
+# Maven
+target/
+*/target/
+mcp-server-demo/target/
+mcp-client-demo/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+.metadata/
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.loadpath
+
+# VS Code
+.vscode/
+.code-workspace
+
+# Spring Boot
+spring-boot-*.pid
+.spring-boot-devtools.properties
+
+# React build
+mcp-client-demo/src/main/resources/static/built/
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.orig
