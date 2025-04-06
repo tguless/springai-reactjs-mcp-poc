@@ -15,12 +15,16 @@
     <name>MCP Client Demo</name>
     <description>MCP Client Demo with Spring Boot and ReactJS</description>
 
+    <properties>
+        <spring.ai.version>1.0.0-M6</spring.ai.version>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-bom</artifactId>
-                <version>1.0.0-M6</version>
+                <version>${spring.ai.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -46,22 +50,22 @@
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-anthropic-spring-boot-starter</artifactId>
-            <version>1.0.0-M6</version>
+            <version>${spring.ai.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-anthropic</artifactId>
-            <version>1.0.0-M6</version>
+            <version>${spring.ai.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-mcp-client-spring-boot-starter</artifactId>
-            <version>1.0.0-M6</version>
+            <version>${spring.ai.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-core</artifactId>
-            <version>1.0.0-M6</version>
+            <version>${spring.ai.version}</version>
         </dependency>
 
         <!-- Lombok for reducing boilerplate -->
