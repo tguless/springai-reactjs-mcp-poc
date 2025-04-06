@@ -32,6 +32,7 @@ import com.example.mcpserver.model.flights.ComponentClientKeyResponse;
 import com.example.mcpserver.model.flights.AirlineResponse;
 import com.example.mcpserver.model.flights.AircraftResponse;
 import com.example.mcpserver.model.flights.AirportResponse;
+import com.example.mcpserver.model.flights.CityResponse;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -920,6 +921,42 @@ public class FlightService {
         } catch (Exception e) {
             log.error("Error listing airports", e);
             throw new RuntimeException("Failed to list airports: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Get details of a specific city
+     */
+    public CityResponse getCity(String cityId) {
+        log.debug("Getting city details for ID: {}", cityId);
+        
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            return duffelClient.getCity(authorization, accept, DUFFEL_AIR_API_VERSION, cityId);
+        } catch (Exception e) {
+            log.error("Error retrieving city details", e);
+            throw new RuntimeException("Failed to get city details: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * List cities with optional pagination
+     */
+    public CityResponse listCities(Integer limit, String before, String after) {
+        log.debug("Listing cities with limit: {}, before: {}, after: {}", 
+                limit, before, after);
+        
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            return duffelClient.listCities(authorization, accept, DUFFEL_AIR_API_VERSION, 
+                    limit, before, after);
+        } catch (Exception e) {
+            log.error("Error listing cities", e);
+            throw new RuntimeException("Failed to list cities: " + e.getMessage(), e);
         }
     }
     

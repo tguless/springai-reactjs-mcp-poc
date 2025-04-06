@@ -38,6 +38,7 @@ import com.example.mcpserver.model.flights.ComponentClientKeyResponse;
 import com.example.mcpserver.model.flights.AirlineResponse;
 import com.example.mcpserver.model.flights.AircraftResponse;
 import com.example.mcpserver.model.flights.AirportResponse;
+import com.example.mcpserver.model.flights.CityResponse;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -476,5 +477,25 @@ public interface DuffelClient {
             @RequestParam(value = "before", required = false) String before,
             @RequestParam(value = "after", required = false) String after,
             @RequestParam(value = "iata_country_code", required = false) String iataCountryCode
+    );
+    
+    // New endpoints for cities
+    
+    @GetMapping("/air/cities/{id}")
+    CityResponse getCity(
+            @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Accept") String accept,
+            @RequestHeader("Duffel-Version") String duffelVersion,
+            @PathVariable("id") String cityId
+    );
+    
+    @GetMapping("/air/cities")
+    CityResponse listCities(
+            @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Accept") String accept,
+            @RequestHeader("Duffel-Version") String duffelVersion,
+            @RequestParam(value = "limit", required = false) Integer limit,
+            @RequestParam(value = "before", required = false) String before,
+            @RequestParam(value = "after", required = false) String after
     );
 } 

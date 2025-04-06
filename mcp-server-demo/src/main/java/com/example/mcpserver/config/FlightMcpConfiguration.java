@@ -18,6 +18,7 @@ import com.example.mcpserver.model.flights.ComponentClientKeyResponse;
 import com.example.mcpserver.model.flights.AirlineResponse;
 import com.example.mcpserver.model.flights.AircraftResponse;
 import com.example.mcpserver.model.flights.AirportResponse;
+import com.example.mcpserver.model.flights.CityResponse;
 import com.example.mcpserver.service.FlightService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -476,6 +477,22 @@ public class FlightMcpConfiguration {
                 @ToolParam(description = "Filter by IATA country code, e.g. 'US' for United States (optional)") String iataCountryCode) {
             
             return service.listAirports(limit, before, after, iataCountryCode);
+        }
+        
+        @Tool(description = "Get details about a specific city")
+        public CityResponse getCity(
+                @ToolParam(description = "The ID of the city to retrieve") String cityId) {
+            
+            return service.getCity(cityId);
+        }
+        
+        @Tool(description = "List cities with optional pagination parameters")
+        public CityResponse listCities(
+                @ToolParam(description = "Maximum number of cities to return per page (1-200)") Integer limit,
+                @ToolParam(description = "Pagination cursor for items before this ID (optional)") String before,
+                @ToolParam(description = "Pagination cursor for items after this ID (optional)") String after) {
+            
+            return service.listCities(limit, before, after);
         }
     }
 } 
