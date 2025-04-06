@@ -12,6 +12,9 @@ import com.example.mcpserver.model.flights.OrderChangeRequestCreate;
 import com.example.mcpserver.model.flights.OrderChangeRequestResponse;
 import com.example.mcpserver.model.flights.OrderChangeOfferResponse;
 import com.example.mcpserver.model.flights.OrderChangeResponse;
+import com.example.mcpserver.model.flights.CustomerUserResponse;
+import com.example.mcpserver.model.flights.CustomerUserGroupResponse;
+import com.example.mcpserver.model.flights.ComponentClientKeyResponse;
 import com.example.mcpserver.service.FlightService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -312,6 +316,114 @@ public class FlightMcpConfiguration {
                 @ToolParam(description = "3D Secure session ID for card payments (optional)") String threeDSecureSessionId) {
                 
             return service.confirmOrderChange(orderChangeId, paymentType, amount, currency, threeDSecureSessionId);
+        }
+        
+        @Tool(description = "Create a new customer user in the Duffel platform")
+        public CustomerUserResponse createCustomerUser(
+                @ToolParam(description = "Customer's email address") String email,
+                @ToolParam(description = "Customer's first name") String givenName,
+                @ToolParam(description = "Customer's last name") String familyName,
+                @ToolParam(description = "Customer's phone number in E.164 (international) format (e.g., +442080160509)") String phoneNumber,
+                @ToolParam(description = "ID of the group to associate the customer with (optional)") String groupId) {
+                
+            return service.createCustomerUser(email, givenName, familyName, phoneNumber, groupId);
+        }
+        
+        @Tool(description = "Get details of a specific customer user")
+        public CustomerUserResponse getCustomerUser(
+                @ToolParam(description = "The ID of the customer user to retrieve") String userId) {
+                
+            return service.getCustomerUser(userId);
+        }
+        
+        @Tool(description = "Update an existing customer user's information")
+        public CustomerUserResponse updateCustomerUser(
+                @ToolParam(description = "The ID of the customer user to update") String userId,
+                @ToolParam(description = "Customer's updated email address") String email,
+                @ToolParam(description = "Customer's updated first name") String givenName,
+                @ToolParam(description = "Customer's updated last name") String familyName,
+                @ToolParam(description = "Customer's updated phone number in E.164 (international) format") String phoneNumber,
+                @ToolParam(description = "Updated ID of the group to associate the customer with (optional)") String groupId) {
+                
+            return service.updateCustomerUser(userId, email, givenName, familyName, phoneNumber, groupId);
+        }
+        
+        @Tool(description = "List all customer user groups")
+        public CustomerUserGroupResponse listCustomerUserGroups() {
+            return service.listCustomerUserGroups();
+        }
+        
+        @Tool(description = "Create a new customer user group")
+        public CustomerUserGroupResponse createCustomerUserGroup(
+                @ToolParam(description = "Name of the customer user group") String name,
+                @ToolParam(description = "Comma-separated list of user IDs to add to the group (optional)") String userIds) {
+            
+            List<String> userIdList = null;
+            if (userIds != null && !userIds.isEmpty()) {
+                userIdList = Arrays.asList(userIds.split(","));
+            } else {
+                userIdList = new ArrayList<>();
+            }
+            
+            return service.createCustomerUserGroup(name, userIdList);
+        }
+        
+        @Tool(description = "Get details of a specific customer user group")
+        public CustomerUserGroupResponse getCustomerUserGroup(
+                @ToolParam(description = "The ID of the customer user group to retrieve") String groupId) {
+            
+            return service.getCustomerUserGroup(groupId);
+        }
+        
+        @Tool(description = "Update an existing customer user group")
+        public CustomerUserGroupResponse updateCustomerUserGroup(
+                @ToolParam(description = "The ID of the customer user group to update") String groupId,
+                @ToolParam(description = "Updated name of the customer user group") String name,
+                @ToolParam(description = "Comma-separated list of user IDs to include in the group") String userIds) {
+            
+            List<String> userIdList = null;
+            if (userIds != null && !userIds.isEmpty()) {
+                userIdList = Arrays.asList(userIds.split(","));
+            } else {
+                userIdList = new ArrayList<>();
+            }
+            
+            return service.updateCustomerUserGroup(groupId, name, userIdList);
+        }
+        
+        @Tool(description = "Delete a customer user group")
+        public void deleteCustomerUserGroup(
+                @ToolParam(description = "The ID of the customer user group to delete") String groupId) {
+            
+            service.deleteCustomerUserGroup(groupId);
+        }
+        
+        @Tool(description = "Create a component client key with no scope for authenticating Duffel UI components")
+        public ComponentClientKeyResponse createComponentClientKey() {
+            return service.createComponentClientKey();
+        }
+        
+        @Tool(description = "Create a component client key scoped to a specific user for authenticating Duffel UI components")
+        public ComponentClientKeyResponse createComponentClientKeyForUser(
+                @ToolParam(description = "ID of the customer user to associate with this key") String userId) {
+            
+            return service.createComponentClientKeyForUser(userId);
+        }
+        
+        @Tool(description = "Create a component client key scoped to a specific user and order for authenticating Duffel UI components")
+        public ComponentClientKeyResponse createComponentClientKeyForUserAndOrder(
+                @ToolParam(description = "ID of the customer user to associate with this key") String userId,
+                @ToolParam(description = "ID of the order to associate with this key") String orderId) {
+            
+            return service.createComponentClientKeyForUserAndOrder(userId, orderId);
+        }
+        
+        @Tool(description = "Create a component client key scoped to a specific user and booking for authenticating Duffel UI components")
+        public ComponentClientKeyResponse createComponentClientKeyForUserAndBooking(
+                @ToolParam(description = "ID of the customer user to associate with this key") String userId,
+                @ToolParam(description = "ID of the booking to associate with this key") String bookingId) {
+            
+            return service.createComponentClientKeyForUserAndBooking(userId, bookingId);
         }
     }
 } 

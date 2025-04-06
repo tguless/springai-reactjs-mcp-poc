@@ -25,6 +25,16 @@ import com.example.mcpserver.model.flights.AirlineInitiatedChangeResponse;
 import com.example.mcpserver.model.flights.AirlineInitiatedChangeUpdateRequest;
 import com.example.mcpserver.model.flights.BatchOfferRequestCreate;
 import com.example.mcpserver.model.flights.BatchOfferRequestResponse;
+import com.example.mcpserver.model.flights.CustomerUserCreateRequest;
+import com.example.mcpserver.model.flights.CustomerUserUpdateRequest;
+import com.example.mcpserver.model.flights.CustomerUserResponse;
+import com.example.mcpserver.model.flights.CustomerUserGroupCreateRequest;
+import com.example.mcpserver.model.flights.CustomerUserGroupUpdateRequest;
+import com.example.mcpserver.model.flights.CustomerUserGroupResponse;
+import com.example.mcpserver.model.flights.ComponentClientKeyUserRequest;
+import com.example.mcpserver.model.flights.ComponentClientKeyUserOrderRequest;
+import com.example.mcpserver.model.flights.ComponentClientKeyUserBookingRequest;
+import com.example.mcpserver.model.flights.ComponentClientKeyResponse;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +44,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 
@@ -298,5 +310,107 @@ public interface DuffelClient {
             @RequestHeader("Accept") String accept,
             @RequestHeader("Duffel-Version") String duffelVersion,
             @PathVariable("id") String batchOfferRequestId
+    );
+    
+    // New endpoints for customer users
+    
+    @PostMapping("/identity/customer/users")
+    CustomerUserResponse createCustomerUser(
+            @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Accept") String accept,
+            @RequestHeader("Duffel-Version") String duffelVersion,
+            @RequestBody DuffelApiWrapper<CustomerUserCreateRequest> request
+    );
+    
+    @GetMapping("/identity/customer/users/{id}")
+    CustomerUserResponse getCustomerUser(
+            @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Accept") String accept,
+            @RequestHeader("Duffel-Version") String duffelVersion,
+            @PathVariable("id") String userId
+    );
+    
+    @PutMapping("/identity/customer/users/{id}")
+    CustomerUserResponse updateCustomerUser(
+            @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Accept") String accept,
+            @RequestHeader("Duffel-Version") String duffelVersion,
+            @PathVariable("id") String userId,
+            @RequestBody DuffelApiWrapper<CustomerUserUpdateRequest> request
+    );
+    
+    // New endpoints for customer user groups
+    
+    @GetMapping("/identity/customer/user_groups")
+    CustomerUserGroupResponse listCustomerUserGroups(
+            @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Accept") String accept,
+            @RequestHeader("Duffel-Version") String duffelVersion
+    );
+    
+    @PostMapping("/identity/customer/user_groups")
+    CustomerUserGroupResponse createCustomerUserGroup(
+            @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Accept") String accept,
+            @RequestHeader("Duffel-Version") String duffelVersion,
+            @RequestBody DuffelApiWrapper<CustomerUserGroupCreateRequest> request
+    );
+    
+    @GetMapping("/identity/customer/user_groups/{id}")
+    CustomerUserGroupResponse getCustomerUserGroup(
+            @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Accept") String accept,
+            @RequestHeader("Duffel-Version") String duffelVersion,
+            @PathVariable("id") String groupId
+    );
+    
+    @PatchMapping("/identity/customer/user_groups/{id}")
+    CustomerUserGroupResponse updateCustomerUserGroup(
+            @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Accept") String accept,
+            @RequestHeader("Duffel-Version") String duffelVersion,
+            @PathVariable("id") String groupId,
+            @RequestBody DuffelApiWrapper<CustomerUserGroupUpdateRequest> request
+    );
+    
+    @DeleteMapping("/identity/customer/user_groups/{id}")
+    void deleteCustomerUserGroup(
+            @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Accept") String accept,
+            @RequestHeader("Duffel-Version") String duffelVersion,
+            @PathVariable("id") String groupId
+    );
+    
+    // New endpoints for component client keys
+    
+    @PostMapping("/identity/component_client_keys")
+    ComponentClientKeyResponse createComponentClientKey(
+            @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Accept") String accept,
+            @RequestHeader("Duffel-Version") String duffelVersion
+    );
+    
+    @PostMapping("/identity/component_client_keys")
+    ComponentClientKeyResponse createComponentClientKeyForUser(
+            @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Accept") String accept,
+            @RequestHeader("Duffel-Version") String duffelVersion,
+            @RequestBody DuffelApiWrapper<ComponentClientKeyUserRequest> request
+    );
+    
+    @PostMapping("/identity/component_client_keys")
+    ComponentClientKeyResponse createComponentClientKeyForUserAndOrder(
+            @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Accept") String accept,
+            @RequestHeader("Duffel-Version") String duffelVersion,
+            @RequestBody DuffelApiWrapper<ComponentClientKeyUserOrderRequest> request
+    );
+    
+    @PostMapping("/identity/component_client_keys")
+    ComponentClientKeyResponse createComponentClientKeyForUserAndBooking(
+            @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Accept") String accept,
+            @RequestHeader("Duffel-Version") String duffelVersion,
+            @RequestBody DuffelApiWrapper<ComponentClientKeyUserBookingRequest> request
     );
 } 

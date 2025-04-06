@@ -19,6 +19,16 @@ import com.example.mcpserver.model.flights.OrderChangeOfferResponse;
 import com.example.mcpserver.model.flights.OrderChangeCreateRequest;
 import com.example.mcpserver.model.flights.OrderChangeConfirmRequest;
 import com.example.mcpserver.model.flights.OrderChangeResponse;
+import com.example.mcpserver.model.flights.CustomerUserCreateRequest;
+import com.example.mcpserver.model.flights.CustomerUserUpdateRequest;
+import com.example.mcpserver.model.flights.CustomerUserResponse;
+import com.example.mcpserver.model.flights.CustomerUserGroupCreateRequest;
+import com.example.mcpserver.model.flights.CustomerUserGroupUpdateRequest;
+import com.example.mcpserver.model.flights.CustomerUserGroupResponse;
+import com.example.mcpserver.model.flights.ComponentClientKeyUserRequest;
+import com.example.mcpserver.model.flights.ComponentClientKeyUserOrderRequest;
+import com.example.mcpserver.model.flights.ComponentClientKeyUserBookingRequest;
+import com.example.mcpserver.model.flights.ComponentClientKeyResponse;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,6 +46,7 @@ public class FlightService {
     private final DuffelClient duffelClient;
     private final DuffelConfig duffelConfig;
     private static final String DUFFEL_API_VERSION = "v1";
+    private static final String DUFFEL_IDENTITY_API_VERSION = "v2";
     
     public FlightService(DuffelClient duffelClient, DuffelConfig duffelConfig) {
         this.duffelClient = duffelClient;
@@ -508,6 +519,299 @@ public class FlightService {
         } catch (Exception e) {
             log.error("Error confirming order change", e);
             throw new RuntimeException("Failed to confirm order change: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Create a new customer user
+     */
+    public CustomerUserResponse createCustomerUser(String email, String givenName, String familyName, String phoneNumber, String groupId) {
+        log.debug("Creating customer user with email: {}, name: {} {}", email, givenName, familyName);
+        
+        // Build the customer user request
+        CustomerUserCreateRequest request = CustomerUserCreateRequest.builder()
+                .email(email)
+                .givenName(givenName)
+                .familyName(familyName)
+                .phoneNumber(phoneNumber)
+                .groupId(groupId)
+                .build();
+        
+        // Wrap the request
+        DuffelApiWrapper<CustomerUserCreateRequest> wrapper = new DuffelApiWrapper<>();
+        wrapper.setData(request);
+        
+        // Headers required by Duffel API
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            // Make the API call
+            return duffelClient.createCustomerUser(authorization, accept, DUFFEL_IDENTITY_API_VERSION, wrapper);
+        } catch (Exception e) {
+            log.error("Error creating customer user", e);
+            throw new RuntimeException("Failed to create customer user: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Get details of a specific customer user
+     */
+    public CustomerUserResponse getCustomerUser(String userId) {
+        log.debug("Getting customer user details for ID: {}", userId);
+        
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            return duffelClient.getCustomerUser(authorization, accept, DUFFEL_IDENTITY_API_VERSION, userId);
+        } catch (Exception e) {
+            log.error("Error retrieving customer user details", e);
+            throw new RuntimeException("Failed to get customer user details: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Update an existing customer user
+     */
+    public CustomerUserResponse updateCustomerUser(String userId, String email, String givenName, String familyName, String phoneNumber, String groupId) {
+        log.debug("Updating customer user with ID: {}", userId);
+        
+        // Build the customer user update request
+        CustomerUserUpdateRequest request = CustomerUserUpdateRequest.builder()
+                .email(email)
+                .givenName(givenName)
+                .familyName(familyName)
+                .phoneNumber(phoneNumber)
+                .groupId(groupId)
+                .build();
+        
+        // Wrap the request
+        DuffelApiWrapper<CustomerUserUpdateRequest> wrapper = new DuffelApiWrapper<>();
+        wrapper.setData(request);
+        
+        // Headers required by Duffel API
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            // Make the API call
+            return duffelClient.updateCustomerUser(authorization, accept, DUFFEL_IDENTITY_API_VERSION, userId, wrapper);
+        } catch (Exception e) {
+            log.error("Error updating customer user", e);
+            throw new RuntimeException("Failed to update customer user: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * List all customer user groups
+     */
+    public CustomerUserGroupResponse listCustomerUserGroups() {
+        log.debug("Listing customer user groups");
+        
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            return duffelClient.listCustomerUserGroups(authorization, accept, DUFFEL_IDENTITY_API_VERSION);
+        } catch (Exception e) {
+            log.error("Error listing customer user groups", e);
+            throw new RuntimeException("Failed to list customer user groups: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Create a new customer user group
+     */
+    public CustomerUserGroupResponse createCustomerUserGroup(String name, List<String> userIds) {
+        log.debug("Creating customer user group with name: {}", name);
+        
+        // Build the customer user group request
+        CustomerUserGroupCreateRequest request = CustomerUserGroupCreateRequest.builder()
+                .name(name)
+                .userIds(userIds)
+                .build();
+        
+        // Wrap the request
+        DuffelApiWrapper<CustomerUserGroupCreateRequest> wrapper = new DuffelApiWrapper<>();
+        wrapper.setData(request);
+        
+        // Headers required by Duffel API
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            // Make the API call
+            return duffelClient.createCustomerUserGroup(authorization, accept, DUFFEL_IDENTITY_API_VERSION, wrapper);
+        } catch (Exception e) {
+            log.error("Error creating customer user group", e);
+            throw new RuntimeException("Failed to create customer user group: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Get details of a specific customer user group
+     */
+    public CustomerUserGroupResponse getCustomerUserGroup(String groupId) {
+        log.debug("Getting customer user group details for ID: {}", groupId);
+        
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            return duffelClient.getCustomerUserGroup(authorization, accept, DUFFEL_IDENTITY_API_VERSION, groupId);
+        } catch (Exception e) {
+            log.error("Error retrieving customer user group details", e);
+            throw new RuntimeException("Failed to get customer user group details: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Update an existing customer user group
+     */
+    public CustomerUserGroupResponse updateCustomerUserGroup(String groupId, String name, List<String> userIds) {
+        log.debug("Updating customer user group with ID: {}", groupId);
+        
+        // Build the customer user group update request
+        CustomerUserGroupUpdateRequest request = CustomerUserGroupUpdateRequest.builder()
+                .name(name)
+                .userIds(userIds)
+                .build();
+        
+        // Wrap the request
+        DuffelApiWrapper<CustomerUserGroupUpdateRequest> wrapper = new DuffelApiWrapper<>();
+        wrapper.setData(request);
+        
+        // Headers required by Duffel API
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            // Make the API call
+            return duffelClient.updateCustomerUserGroup(authorization, accept, DUFFEL_IDENTITY_API_VERSION, groupId, wrapper);
+        } catch (Exception e) {
+            log.error("Error updating customer user group", e);
+            throw new RuntimeException("Failed to update customer user group: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Delete a customer user group
+     */
+    public void deleteCustomerUserGroup(String groupId) {
+        log.debug("Deleting customer user group with ID: {}", groupId);
+        
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            duffelClient.deleteCustomerUserGroup(authorization, accept, DUFFEL_IDENTITY_API_VERSION, groupId);
+        } catch (Exception e) {
+            log.error("Error deleting customer user group", e);
+            throw new RuntimeException("Failed to delete customer user group: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Create a component client key with no scope
+     */
+    public ComponentClientKeyResponse createComponentClientKey() {
+        log.debug("Creating component client key with no scope");
+        
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            return duffelClient.createComponentClientKey(authorization, accept, DUFFEL_IDENTITY_API_VERSION);
+        } catch (Exception e) {
+            log.error("Error creating component client key", e);
+            throw new RuntimeException("Failed to create component client key: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Create a component client key scoped to a specific user
+     */
+    public ComponentClientKeyResponse createComponentClientKeyForUser(String userId) {
+        log.debug("Creating component client key for user: {}", userId);
+        
+        // Build the request
+        ComponentClientKeyUserRequest request = ComponentClientKeyUserRequest.builder()
+                .userId(userId)
+                .build();
+        
+        // Wrap the request
+        DuffelApiWrapper<ComponentClientKeyUserRequest> wrapper = new DuffelApiWrapper<>();
+        wrapper.setData(request);
+        
+        // Headers required by Duffel API
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            // Make the API call
+            return duffelClient.createComponentClientKeyForUser(authorization, accept, DUFFEL_IDENTITY_API_VERSION, wrapper);
+        } catch (Exception e) {
+            log.error("Error creating component client key for user", e);
+            throw new RuntimeException("Failed to create component client key for user: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Create a component client key scoped to a specific user and order
+     */
+    public ComponentClientKeyResponse createComponentClientKeyForUserAndOrder(String userId, String orderId) {
+        log.debug("Creating component client key for user: {} and order: {}", userId, orderId);
+        
+        // Build the request
+        ComponentClientKeyUserOrderRequest request = ComponentClientKeyUserOrderRequest.builder()
+                .userId(userId)
+                .orderId(orderId)
+                .build();
+        
+        // Wrap the request
+        DuffelApiWrapper<ComponentClientKeyUserOrderRequest> wrapper = new DuffelApiWrapper<>();
+        wrapper.setData(request);
+        
+        // Headers required by Duffel API
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            // Make the API call
+            return duffelClient.createComponentClientKeyForUserAndOrder(authorization, accept, DUFFEL_IDENTITY_API_VERSION, wrapper);
+        } catch (Exception e) {
+            log.error("Error creating component client key for user and order", e);
+            throw new RuntimeException("Failed to create component client key for user and order: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Create a component client key scoped to a specific user and booking
+     */
+    public ComponentClientKeyResponse createComponentClientKeyForUserAndBooking(String userId, String bookingId) {
+        log.debug("Creating component client key for user: {} and booking: {}", userId, bookingId);
+        
+        // Build the request
+        ComponentClientKeyUserBookingRequest request = ComponentClientKeyUserBookingRequest.builder()
+                .userId(userId)
+                .bookingId(bookingId)
+                .build();
+        
+        // Wrap the request
+        DuffelApiWrapper<ComponentClientKeyUserBookingRequest> wrapper = new DuffelApiWrapper<>();
+        wrapper.setData(request);
+        
+        // Headers required by Duffel API
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            // Make the API call
+            return duffelClient.createComponentClientKeyForUserAndBooking(authorization, accept, DUFFEL_IDENTITY_API_VERSION, wrapper);
+        } catch (Exception e) {
+            log.error("Error creating component client key for user and booking", e);
+            throw new RuntimeException("Failed to create component client key for user and booking: " + e.getMessage(), e);
         }
     }
     
