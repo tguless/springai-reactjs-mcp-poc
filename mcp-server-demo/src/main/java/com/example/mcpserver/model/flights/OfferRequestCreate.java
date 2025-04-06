@@ -5,9 +5,11 @@ import lombok.Data;
 import lombok.Builder;
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Data
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OfferRequestCreate {
     @JsonProperty("slices")
     private List<Slice> slices;
@@ -24,6 +26,7 @@ public class OfferRequestCreate {
     
     @Data
     @Builder
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Slice {
         @JsonProperty("origin")
         private String origin;
@@ -41,6 +44,7 @@ public class OfferRequestCreate {
     
     @Data
     @Builder
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Passenger {
         @JsonProperty("type")
         private PassengerType type;
