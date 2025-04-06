@@ -53,7 +53,7 @@ public class BatchOfferMcpConfiguration {
             logger.info("BatchOfferTools initialized");
         }
 
-        @Tool(description = "Create a batch offer request to search for flights with results returned incrementally")
+        //@Tool(description = "Create a batch offer request to search for flights with results returned incrementally")
         public BatchOfferRequestResponse.BatchOfferRequest createBatchOfferRequest(
                 @ToolParam(description = "The cabin class for the flights (economy, premium_economy, business, first)") String cabinClass,
                 @ToolParam(description = "Maximum number of connections (0 for direct flights only, default is 1)") Integer maxConnections,

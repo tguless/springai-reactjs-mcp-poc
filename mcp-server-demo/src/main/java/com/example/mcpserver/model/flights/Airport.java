@@ -16,7 +16,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Airport {
+    @JsonProperty("id")
     private String id;
+    @JsonProperty("name")
     private String name;
     
     @JsonProperty("iata_code")
@@ -37,9 +39,12 @@ public class Airport {
     @JsonProperty("time_zone")
     private String timeZone;
     
+    @JsonProperty("latitude")
     private Double latitude;
+    @JsonProperty("longitude")
     private Double longitude;
     
+    @JsonProperty("city")
     private City city;
     
     @Data
@@ -47,7 +52,9 @@ public class Airport {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class City {
+        @JsonProperty("id")
         private String id;
+        @JsonProperty("name")
         private String name;
         
         @JsonProperty("iata_code")
@@ -56,6 +63,7 @@ public class Airport {
         @JsonProperty("iata_country_code")
         private String iataCountryCode;
         
+        @JsonProperty("airports")
         private List<AirportSummary> airports;
         
         @Data
@@ -63,7 +71,9 @@ public class Airport {
         @NoArgsConstructor
         @AllArgsConstructor
         public static class AirportSummary {
+            @JsonProperty("id")
             private String id;
+            @JsonProperty("name")
             private String name;
             
             @JsonProperty("iata_code")
@@ -75,7 +85,9 @@ public class Airport {
             @JsonProperty("iata_country_code")
             private String iataCountryCode;
             
+            @JsonProperty("latitude")
             private Double latitude;
+            @JsonProperty("longitude")
             private Double longitude;
             
             @JsonProperty("time_zone")

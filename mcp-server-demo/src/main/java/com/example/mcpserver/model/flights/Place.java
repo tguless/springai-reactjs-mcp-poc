@@ -16,8 +16,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Place {
+    @JsonProperty("id")
     private String id;
+    @JsonProperty("name")
     private String name;
+    @JsonProperty("type")
     private String type; // "airport" or "city"
     
     @JsonProperty("iata_code")
@@ -35,13 +38,17 @@ public class Place {
     @JsonProperty("city_name")
     private String cityName;
     
+    @JsonProperty("city")
     private City city;
     
+    @JsonProperty("latitude")
     private Double latitude;
+    @JsonProperty("longitude")
     private Double longitude;
     
     @JsonProperty("time_zone")
     private String timeZone;
     
+    @JsonProperty("airports")
     private List<Place> airports;
 } 

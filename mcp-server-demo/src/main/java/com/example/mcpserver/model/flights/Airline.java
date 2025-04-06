@@ -14,7 +14,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Airline {
+    @JsonProperty("id")
     private String id;
+    @JsonProperty("name")
     private String name;
     
     @JsonProperty("iata_code")
