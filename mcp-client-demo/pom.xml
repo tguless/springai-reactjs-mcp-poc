@@ -46,7 +46,6 @@
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-anthropic-spring-boot-starter</artifactId>
-            <version>1.0.0-M6</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.ai</groupId>
@@ -56,12 +55,10 @@
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-mcp-client-spring-boot-starter</artifactId>
-            <version>1.0.0-M6</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-core</artifactId>
-            <version>1.0.0-M6</version>
         </dependency>
 
         <!-- Lombok for reducing boilerplate -->
@@ -150,7 +147,7 @@
             <name>Spring Milestones</name>
             <url>https://repo.spring.io/milestone</url>
             <snapshots>
-                <enabled>false</enabled>
+                <enabled>true</enabled>
             </snapshots>
         </repository>
     </repositories>
