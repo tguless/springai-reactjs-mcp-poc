@@ -1,0 +1,31 @@
+package com.example.mcpserver.model.flights;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+/**
+ * Response model for Airport operations in the Duffel API
+ */
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class AirportResponse {
+    private Airport data;
+    private List<Airport> data_list;
+    private Meta meta;
+    
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Meta {
+        private Integer limit;
+        private String before;
+        private String after;
+    }
+} 

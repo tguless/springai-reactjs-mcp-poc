@@ -31,6 +31,7 @@ import com.example.mcpserver.model.flights.ComponentClientKeyUserBookingRequest;
 import com.example.mcpserver.model.flights.ComponentClientKeyResponse;
 import com.example.mcpserver.model.flights.AirlineResponse;
 import com.example.mcpserver.model.flights.AircraftResponse;
+import com.example.mcpserver.model.flights.AirportResponse;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -883,6 +884,42 @@ public class FlightService {
         } catch (Exception e) {
             log.error("Error listing aircraft", e);
             throw new RuntimeException("Failed to list aircraft: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Get details of a specific airport
+     */
+    public AirportResponse getAirport(String airportId) {
+        log.debug("Getting airport details for ID: {}", airportId);
+        
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            return duffelClient.getAirport(authorization, accept, DUFFEL_AIR_API_VERSION, airportId);
+        } catch (Exception e) {
+            log.error("Error retrieving airport details", e);
+            throw new RuntimeException("Failed to get airport details: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * List airports with optional pagination and filtering
+     */
+    public AirportResponse listAirports(Integer limit, String before, String after, String iataCountryCode) {
+        log.debug("Listing airports with limit: {}, before: {}, after: {}, country code: {}", 
+                limit, before, after, iataCountryCode);
+        
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            return duffelClient.listAirports(authorization, accept, DUFFEL_AIR_API_VERSION, 
+                    limit, before, after, iataCountryCode);
+        } catch (Exception e) {
+            log.error("Error listing airports", e);
+            throw new RuntimeException("Failed to list airports: " + e.getMessage(), e);
         }
     }
     
