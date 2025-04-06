@@ -30,6 +30,7 @@ import com.example.mcpserver.model.flights.ComponentClientKeyUserOrderRequest;
 import com.example.mcpserver.model.flights.ComponentClientKeyUserBookingRequest;
 import com.example.mcpserver.model.flights.ComponentClientKeyResponse;
 import com.example.mcpserver.model.flights.AirlineResponse;
+import com.example.mcpserver.model.flights.AircraftResponse;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -848,6 +849,40 @@ public class FlightService {
         } catch (Exception e) {
             log.error("Error listing airlines", e);
             throw new RuntimeException("Failed to list airlines: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Get details of a specific aircraft
+     */
+    public AircraftResponse getAircraft(String aircraftId) {
+        log.debug("Getting aircraft details for ID: {}", aircraftId);
+        
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            return duffelClient.getAircraft(authorization, accept, DUFFEL_AIR_API_VERSION, aircraftId);
+        } catch (Exception e) {
+            log.error("Error retrieving aircraft details", e);
+            throw new RuntimeException("Failed to get aircraft details: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * List aircraft with optional pagination
+     */
+    public AircraftResponse listAircraft(Integer limit, String before, String after) {
+        log.debug("Listing aircraft with limit: {}, before: {}, after: {}", limit, before, after);
+        
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            return duffelClient.listAircraft(authorization, accept, DUFFEL_AIR_API_VERSION, limit, before, after);
+        } catch (Exception e) {
+            log.error("Error listing aircraft", e);
+            throw new RuntimeException("Failed to list aircraft: " + e.getMessage(), e);
         }
     }
     
