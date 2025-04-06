@@ -34,6 +34,7 @@ import com.example.mcpserver.model.flights.AircraftResponse;
 import com.example.mcpserver.model.flights.AirportResponse;
 import com.example.mcpserver.model.flights.CityResponse;
 import com.example.mcpserver.model.flights.PlaceResponse;
+import com.example.mcpserver.model.flights.LoyaltyProgrammeResponse;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -987,6 +988,42 @@ public class FlightService {
         } catch (Exception e) {
             log.error("Error finding place suggestions", e);
             throw new RuntimeException("Failed to find place suggestions: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Get details of a specific loyalty programme
+     */
+    public LoyaltyProgrammeResponse getLoyaltyProgramme(String loyaltyProgrammeId) {
+        log.debug("Getting loyalty programme details for ID: {}", loyaltyProgrammeId);
+        
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            return duffelClient.getLoyaltyProgramme(authorization, accept, DUFFEL_AIR_API_VERSION, loyaltyProgrammeId);
+        } catch (Exception e) {
+            log.error("Error retrieving loyalty programme details", e);
+            throw new RuntimeException("Failed to get loyalty programme details: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * List loyalty programmes with optional pagination
+     */
+    public LoyaltyProgrammeResponse listLoyaltyProgrammes(Integer limit, String before, String after) {
+        log.debug("Listing loyalty programmes with limit: {}, before: {}, after: {}", 
+                limit, before, after);
+        
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            return duffelClient.listLoyaltyProgrammes(authorization, accept, DUFFEL_AIR_API_VERSION, 
+                    limit, before, after);
+        } catch (Exception e) {
+            log.error("Error listing loyalty programmes", e);
+            throw new RuntimeException("Failed to list loyalty programmes: " + e.getMessage(), e);
         }
     }
     

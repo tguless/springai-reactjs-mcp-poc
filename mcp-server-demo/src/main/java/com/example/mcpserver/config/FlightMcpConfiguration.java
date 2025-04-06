@@ -20,6 +20,7 @@ import com.example.mcpserver.model.flights.AircraftResponse;
 import com.example.mcpserver.model.flights.AirportResponse;
 import com.example.mcpserver.model.flights.CityResponse;
 import com.example.mcpserver.model.flights.PlaceResponse;
+import com.example.mcpserver.model.flights.LoyaltyProgrammeResponse;
 import com.example.mcpserver.service.FlightService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -504,6 +505,22 @@ public class FlightMcpConfiguration {
                 @ToolParam(description = "Longitude to search by (optional, required if using radius)") String longitude) {
             
             return service.listPlaceSuggestions(query, radius, latitude, longitude);
+        }
+        
+        @Tool(description = "Get details about a specific loyalty programme")
+        public LoyaltyProgrammeResponse getLoyaltyProgramme(
+                @ToolParam(description = "The ID of the loyalty programme to retrieve") String loyaltyProgrammeId) {
+            
+            return service.getLoyaltyProgramme(loyaltyProgrammeId);
+        }
+        
+        @Tool(description = "List loyalty programmes with optional pagination parameters")
+        public LoyaltyProgrammeResponse listLoyaltyProgrammes(
+                @ToolParam(description = "Maximum number of loyalty programmes to return per page (1-200)") Integer limit,
+                @ToolParam(description = "Pagination cursor for items before this ID (optional)") String before,
+                @ToolParam(description = "Pagination cursor for items after this ID (optional)") String after) {
+            
+            return service.listLoyaltyProgrammes(limit, before, after);
         }
     }
 } 
