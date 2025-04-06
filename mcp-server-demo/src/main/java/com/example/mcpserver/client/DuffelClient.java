@@ -35,6 +35,7 @@ import com.example.mcpserver.model.flights.ComponentClientKeyUserRequest;
 import com.example.mcpserver.model.flights.ComponentClientKeyUserOrderRequest;
 import com.example.mcpserver.model.flights.ComponentClientKeyUserBookingRequest;
 import com.example.mcpserver.model.flights.ComponentClientKeyResponse;
+import com.example.mcpserver.model.flights.AirlineResponse;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -412,5 +413,25 @@ public interface DuffelClient {
             @RequestHeader("Accept") String accept,
             @RequestHeader("Duffel-Version") String duffelVersion,
             @RequestBody DuffelApiWrapper<ComponentClientKeyUserBookingRequest> request
+    );
+    
+    // New endpoints for airlines
+    
+    @GetMapping("/air/airlines/{id}")
+    AirlineResponse getAirline(
+            @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Accept") String accept,
+            @RequestHeader("Duffel-Version") String duffelVersion,
+            @PathVariable("id") String airlineId
+    );
+    
+    @GetMapping("/air/airlines")
+    AirlineResponse listAirlines(
+            @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Accept") String accept,
+            @RequestHeader("Duffel-Version") String duffelVersion,
+            @RequestParam(value = "limit", required = false) Integer limit,
+            @RequestParam(value = "before", required = false) String before,
+            @RequestParam(value = "after", required = false) String after
     );
 } 

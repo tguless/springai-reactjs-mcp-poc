@@ -29,6 +29,7 @@ import com.example.mcpserver.model.flights.ComponentClientKeyUserRequest;
 import com.example.mcpserver.model.flights.ComponentClientKeyUserOrderRequest;
 import com.example.mcpserver.model.flights.ComponentClientKeyUserBookingRequest;
 import com.example.mcpserver.model.flights.ComponentClientKeyResponse;
+import com.example.mcpserver.model.flights.AirlineResponse;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,7 @@ public class FlightService {
     private final DuffelConfig duffelConfig;
     private static final String DUFFEL_API_VERSION = "v1";
     private static final String DUFFEL_IDENTITY_API_VERSION = "v2";
+    private static final String DUFFEL_AIR_API_VERSION = "v2";
     
     public FlightService(DuffelClient duffelClient, DuffelConfig duffelConfig) {
         this.duffelClient = duffelClient;
@@ -812,6 +814,40 @@ public class FlightService {
         } catch (Exception e) {
             log.error("Error creating component client key for user and booking", e);
             throw new RuntimeException("Failed to create component client key for user and booking: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Get details of a specific airline
+     */
+    public AirlineResponse getAirline(String airlineId) {
+        log.debug("Getting airline details for ID: {}", airlineId);
+        
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            return duffelClient.getAirline(authorization, accept, DUFFEL_AIR_API_VERSION, airlineId);
+        } catch (Exception e) {
+            log.error("Error retrieving airline details", e);
+            throw new RuntimeException("Failed to get airline details: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * List airlines with optional pagination
+     */
+    public AirlineResponse listAirlines(Integer limit, String before, String after) {
+        log.debug("Listing airlines with limit: {}, before: {}, after: {}", limit, before, after);
+        
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            return duffelClient.listAirlines(authorization, accept, DUFFEL_AIR_API_VERSION, limit, before, after);
+        } catch (Exception e) {
+            log.error("Error listing airlines", e);
+            throw new RuntimeException("Failed to list airlines: " + e.getMessage(), e);
         }
     }
     

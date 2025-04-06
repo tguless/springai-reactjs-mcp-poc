@@ -15,6 +15,7 @@ import com.example.mcpserver.model.flights.OrderChangeResponse;
 import com.example.mcpserver.model.flights.CustomerUserResponse;
 import com.example.mcpserver.model.flights.CustomerUserGroupResponse;
 import com.example.mcpserver.model.flights.ComponentClientKeyResponse;
+import com.example.mcpserver.model.flights.AirlineResponse;
 import com.example.mcpserver.service.FlightService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -424,6 +425,22 @@ public class FlightMcpConfiguration {
                 @ToolParam(description = "ID of the booking to associate with this key") String bookingId) {
             
             return service.createComponentClientKeyForUserAndBooking(userId, bookingId);
+        }
+        
+        @Tool(description = "Get details about a specific airline")
+        public AirlineResponse getAirline(
+                @ToolParam(description = "The ID of the airline to retrieve") String airlineId) {
+            
+            return service.getAirline(airlineId);
+        }
+        
+        @Tool(description = "List airlines with optional pagination parameters")
+        public AirlineResponse listAirlines(
+                @ToolParam(description = "Maximum number of airlines to return per page (1-200)") Integer limit,
+                @ToolParam(description = "Pagination cursor for items before this ID (optional)") String before,
+                @ToolParam(description = "Pagination cursor for items after this ID (optional)") String after) {
+            
+            return service.listAirlines(limit, before, after);
         }
     }
 } 
