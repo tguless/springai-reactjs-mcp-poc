@@ -33,6 +33,7 @@ import com.example.mcpserver.model.flights.AirlineResponse;
 import com.example.mcpserver.model.flights.AircraftResponse;
 import com.example.mcpserver.model.flights.AirportResponse;
 import com.example.mcpserver.model.flights.CityResponse;
+import com.example.mcpserver.model.flights.PlaceResponse;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -957,6 +958,35 @@ public class FlightService {
         } catch (Exception e) {
             log.error("Error listing cities", e);
             throw new RuntimeException("Failed to list cities: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * List place suggestions for searching origins and destinations
+     * @param query Search string for finding Places by name
+     * @param rad Radius in meters to search within
+     * @param lat Latitude to search by
+     * @param lng Longitude to search by
+     */
+    public PlaceResponse listPlaceSuggestions(String query, String rad, String lat, String lng) {
+        log.debug("Finding place suggestions for query: {}, radius: {}, lat: {}, lng: {}", 
+                query, rad, lat, lng);
+        
+        String authorization = "Bearer " + duffelConfig.getApiKey();
+        String accept = "application/json";
+        
+        try {
+            return duffelClient.listPlaceSuggestions(
+                    authorization, 
+                    accept, 
+                    DUFFEL_AIR_API_VERSION, 
+                    query, 
+                    rad, 
+                    lat, 
+                    lng);
+        } catch (Exception e) {
+            log.error("Error finding place suggestions", e);
+            throw new RuntimeException("Failed to find place suggestions: " + e.getMessage(), e);
         }
     }
     

@@ -39,6 +39,7 @@ import com.example.mcpserver.model.flights.AirlineResponse;
 import com.example.mcpserver.model.flights.AircraftResponse;
 import com.example.mcpserver.model.flights.AirportResponse;
 import com.example.mcpserver.model.flights.CityResponse;
+import com.example.mcpserver.model.flights.PlaceResponse;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -497,5 +498,18 @@ public interface DuffelClient {
             @RequestParam(value = "limit", required = false) Integer limit,
             @RequestParam(value = "before", required = false) String before,
             @RequestParam(value = "after", required = false) String after
+    );
+    
+    // New endpoint for place suggestions
+    
+    @GetMapping("/places/suggestions")
+    PlaceResponse listPlaceSuggestions(
+            @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Accept") String accept,
+            @RequestHeader("Duffel-Version") String duffelVersion,
+            @RequestParam(value = "query", required = false) String query,
+            @RequestParam(value = "rad", required = false) String rad,
+            @RequestParam(value = "lat", required = false) String lat,
+            @RequestParam(value = "lng", required = false) String lng
     );
 } 

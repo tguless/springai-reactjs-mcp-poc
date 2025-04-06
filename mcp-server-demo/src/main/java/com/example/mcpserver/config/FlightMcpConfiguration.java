@@ -19,6 +19,7 @@ import com.example.mcpserver.model.flights.AirlineResponse;
 import com.example.mcpserver.model.flights.AircraftResponse;
 import com.example.mcpserver.model.flights.AirportResponse;
 import com.example.mcpserver.model.flights.CityResponse;
+import com.example.mcpserver.model.flights.PlaceResponse;
 import com.example.mcpserver.service.FlightService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -493,6 +494,16 @@ public class FlightMcpConfiguration {
                 @ToolParam(description = "Pagination cursor for items after this ID (optional)") String after) {
             
             return service.listCities(limit, before, after);
+        }
+        
+        @Tool(description = "Find place suggestions for airports or cities that match a search query or are within a geographic radius")
+        public PlaceResponse findPlaceSuggestions(
+                @ToolParam(description = "Search string for finding Places by name (e.g. 'heathrow', 'london')") String query,
+                @ToolParam(description = "Radius in meters to search within (optional)") String radius,
+                @ToolParam(description = "Latitude to search by (optional, required if using radius)") String latitude,
+                @ToolParam(description = "Longitude to search by (optional, required if using radius)") String longitude) {
+            
+            return service.listPlaceSuggestions(query, radius, latitude, longitude);
         }
     }
 } 
