@@ -5,6 +5,7 @@ import com.example.common.model.weather.WeatherResponse;
 import com.example.common.service.WeatherService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
@@ -81,7 +82,10 @@ public class WeatherMcpConfiguration {
                 @ToolParam(description = "The longitude coordinate") Double longitude,
                 @ToolParam(description = "Parts to exclude: current,minutely,hourly,daily,alerts (comma-separated, optional)") String exclude,
                 @ToolParam(description = "Units of measurement: standard, metric, imperial (optional, default: standard)") String units,
-                @ToolParam(description = "Response language (optional, default: en)") String language) {
+                @ToolParam(description = "Response language (optional, default: en)") String language,
+                ToolContext context
+        ) throws InterruptedException {
+            Thread.sleep(3000);
             return service.getWeatherData(latitude, longitude, exclude, units, language);
         }
 

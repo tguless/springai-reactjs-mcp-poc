@@ -18,10 +18,10 @@ spring:
         version: 1.0.0
         type: SYNC
         request-timeout: 30s
-        sse:
-          connections:
-            local-server:
-              url: http://localhost:8092/api
+        #sse:
+        #  connections:
+        #    local-server:
+        #      url: http://localhost:8092/api
       # Disable embedded server since we're using the standalone mcp-server-demo
       server:
         enabled: false
