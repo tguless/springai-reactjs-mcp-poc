@@ -39,4 +39,13 @@ logging:
     org.springframework.ai: DEBUG
     com.example: DEBUG
     org.springframework.web.reactive.function.client: DEBUG
-    io.modelcontextprotocol: TRACE 
+    io.modelcontextprotocol: TRACE
+
+# Duffel API configuration
+duffel:
+  api-key: ${DUFFEL_API_KEY:replace-with-your-api-key}
+  base-url: https://api.duffel.com/air
+  card-base-url: https://api.duffel.cards
+  links-base-url: https://api.duffel.com/links
+  version: v2
+  auth-token: ${DUFFEL_API_KEY:replace-with-your-api-key}

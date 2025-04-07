@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ public class StatusController {
     private static final Logger logger = LoggerFactory.getLogger(StatusController.class);
     
     @Autowired
+    @Qualifier("weatherTools")
     private ToolCallbackProvider toolCallbackProvider;
     
     @Value("${spring.ai.mcp.server.name:sse-mcp-server}")

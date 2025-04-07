@@ -47,18 +47,20 @@ public class ChatbotController {
      */
     public ChatbotController(ChatClient.Builder chatClientBuilder, 
                           @Autowired(required = false) @Qualifier("mcpToolCallbackProvider") ToolCallbackProvider toolCallbackProvider,
-                          McpClientService mcpClientService) {
+                          McpClientService mcpClientService,
+                             List<ToolCallbackProvider> toolCallbackProviders) {
         
         // Build the ChatClient with tools if available
         ChatClient.Builder builder = chatClientBuilder;
         
         if (toolCallbackProvider != null) {
             logger.info("Adding MCP tool callback provider to ChatClient");
-            builder = builder.defaultTools(toolCallbackProvider);
+            builder = builder.defaultTools(toolCallbackProviders);
         } else {
             logger.warn("No MCP tool callback provider available, ChatClient will not have tool support");
         }
-        
+
+
         this.chatClient = builder.build();
         this.mcpClientService = mcpClientService;
         
