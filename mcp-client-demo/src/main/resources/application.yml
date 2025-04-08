@@ -5,6 +5,11 @@ spring:
   application:
     name: mcp-client-demo
   ai:
+    retry:
+      max-attempts: 3
+      backoff:
+        delay: 1000
+        multiplier: 2
     anthropic:
       api-key: ${ANTHROPIC_API_KEY:demo-key-replace-with-actual}
       model: claude-3-7-sonnet-20250219

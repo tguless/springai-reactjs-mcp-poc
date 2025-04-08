@@ -59,12 +59,17 @@ public class ChatbotController {
         /*
         if (toolCallbackProvider != null) {
             logger.info("Adding MCP tool callback provider to ChatClient");
-            builder = builder.defaultTools(toolCallbackProviders);
+            builder = builder.defaultTools(toolCallbackProvider);
+        } else {
+            logger.warn("No MCP tool callback provider available, ChatClient will not have tool support");
+        }*/
+
+        if (toolCallbackProviders != null) {
+            logger.info("Adding MCP tool callback provider to ChatClient");
+            builder = builder.defaultTools(toolCallbackProviders.toArray(new ToolCallbackProvider[0]));
         } else {
             logger.warn("No MCP tool callback provider available, ChatClient will not have tool support");
         }
-
-         */
 
         this.toolCallbackProviders = toolCallbackProviders;
 
@@ -125,23 +130,8 @@ public class ChatbotController {
             
             // Create prompt and get response
             Prompt prompt = new Prompt(aiMessages);
-
-            List<ToolCallbackProvider> newList = new ArrayList<>();
-            List <Object> toolObjects = new ArrayList<>();
-
-            for (ToolCallbackProvider provider : toolCallbackProviders) {
-                if (provider instanceof MethodToolCallbackProvider) {
-                    if(provider.getToolCallbacks()[0].getName().equals("getWeatherData")) {
-                        newList.add(provider);
-                    }
-                    toolObjects.add(provider.getToolCallbacks()[0]);
-
-                }
-            }
-
             // Use the same pattern as the original implementation
-            ChatClient.CallResponseSpec responseSpec = chatClient.prompt(prompt).tools(toolCallbackProviders.toArray(new ToolCallbackProvider[0]))
-                    .toolContext(Map.of("test", "token")).call();
+            ChatClient.CallResponseSpec responseSpec = chatClient.prompt(prompt).toolContext(Map.of("test", "token")).call();
             String responseText = responseSpec.content();
 
             // Format response for the frontend
