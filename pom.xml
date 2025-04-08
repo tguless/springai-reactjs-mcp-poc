@@ -23,6 +23,7 @@
         <module>mcp-common</module>
         <module>mcp-server-demo</module>
         <module>mcp-client-demo</module>
+        <module>mcp-duffel-api</module>
     </modules>
     
     <dependencyManagement>
@@ -53,6 +54,11 @@
             <dependency>
                 <groupId>com.example</groupId>
                 <artifactId>mcp-server-demo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example</groupId>
+                <artifactId>mcp-duffel-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
