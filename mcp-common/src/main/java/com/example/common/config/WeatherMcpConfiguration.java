@@ -3,6 +3,7 @@ package com.example.common.config;
 import com.example.common.model.geocoding.GeocodingLocation;
 import com.example.common.model.weather.WeatherResponse;
 import com.example.common.service.WeatherService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.net.http.HttpRequest;
 import java.util.List;
 
 /**
@@ -92,8 +94,13 @@ public class WeatherMcpConfiguration {
         public WeatherResponse getWeatherForCity(
                 @ToolParam(description = "The city name to search for") String city,
                 @ToolParam(description = "Units of measurement: standard, metric, imperial (optional, default: standard)") String units,
-                @ToolParam(description = "Response language (optional, default: en)") String language) {
+                @ToolParam(description = "Response language (optional, default: en)") String language,
+                ToolContext context
+        ) {
             return service.getWeatherForCity(city, units, language);
         }
+
+
+
     }
 } 

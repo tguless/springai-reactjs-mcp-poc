@@ -7,8 +7,8 @@
     <artifactId>leistritz-sales-lead-gen</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Leistritz Sales Lead Generation</name>
-    <description>Parent project for Leistritz Sales Lead Generation applications</description>
+    <name>Spring MCP Web Client Demo</name>
+    <description>Spring MCP Web Client Demo</description>
     
     <properties>
         <java.version>17</java.version>
@@ -64,6 +64,11 @@
             <dependency>
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-starter-model-anthropic</artifactId>
+                <version>${spring-ai-mcp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-anthropic</artifactId>
                 <version>${spring-ai-mcp.version}</version>
             </dependency>
             <dependency>

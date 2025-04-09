@@ -2,6 +2,7 @@ package com.example.mcpclient.controller;
 
 import com.example.common.config.WeatherMcpConfiguration;
 import com.example.mcpclient.service.McpClientService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
@@ -97,7 +98,7 @@ public class ChatbotController {
      * Start a new conversation with the AI model.
      */
     @PostMapping("/startConversation")
-    public ResponseEntity<Object> startConversation(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<Object> startConversation(@RequestBody Map<String, Object> request, HttpServletRequest httpRequest) {
         try {
             logger.info("Starting a new conversation with AI model");
             
@@ -131,7 +132,7 @@ public class ChatbotController {
             // Create prompt and get response
             Prompt prompt = new Prompt(aiMessages);
             // Use the same pattern as the original implementation
-            ChatClient.CallResponseSpec responseSpec = chatClient.prompt(prompt).toolContext(Map.of("test", "token")).call();
+            ChatClient.CallResponseSpec responseSpec = chatClient.prompt(prompt).toolContext(Map.of("httpRequest",httpRequest)).call();
             String responseText = responseSpec.content();
 
             // Format response for the frontend
@@ -168,13 +169,13 @@ public class ChatbotController {
      * Continue a conversation with the AI model.
      */
     @PostMapping("/continueConversation")
-    public ResponseEntity<Object> continueConversation(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<Object> continueConversation(@RequestBody Map<String, Object> request, HttpServletRequest httpRequest) {
         try {
             logger.info("Continuing conversation with AI model");
             
             // This is now the same as starting a conversation since Spring AI
             // handles the conversation state internally
-            return startConversation(request);
+            return startConversation(request, httpRequest);
         } 
         catch (Exception e) {
             logger.error("Error calling AI model: " + e.getMessage(), e);
