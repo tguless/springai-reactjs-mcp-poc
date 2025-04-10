@@ -5,6 +5,11 @@ spring:
   application:
     name: mcp-client-demo
   ai:
+    retry:
+      max-attempts: 3
+      backoff:
+        delay: 1000
+        multiplier: 2
     anthropic:
       api-key: ${ANTHROPIC_API_KEY:demo-key-replace-with-actual}
       model: claude-3-7-sonnet-20250219
@@ -18,10 +23,10 @@ spring:
         version: 1.0.0
         type: SYNC
         request-timeout: 30s
-        sse:
-          connections:
-            local-server:
-              url: http://localhost:8092/api
+        #sse:
+        #  connections:
+        #    local-server:
+        #      url: http://localhost:8092/api
       # Disable embedded server since we're using the standalone mcp-server-demo
       server:
         enabled: false
@@ -39,4 +44,13 @@ logging:
     org.springframework.ai: DEBUG
     com.example: DEBUG
     org.springframework.web.reactive.function.client: DEBUG
-    io.modelcontextprotocol: TRACE 
+    io.modelcontextprotocol: TRACE
+
+# Duffel API configuration
+duffel:
+  api-key: ${DUFFEL_API_KEY:replace-with-your-api-key}
+  base-url: https://api.duffel.com/air
+  card-base-url: https://api.duffel.cards
+  links-base-url: https://api.duffel.com/links
+  version: v2
+  auth-token: ${DUFFEL_API_KEY:replace-with-your-api-key}

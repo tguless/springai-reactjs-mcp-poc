@@ -46,4 +46,13 @@ logging:
 
 # OpenWeatherMap configuration
 openweathermap:
-  api-key: ${OPENWEATHERMAP_API_KEY:replace-with-your-api-key} 
+  api-key: ${OPENWEATHERMAP_API_KEY:replace-with-your-api-key}
+
+# Duffel API configuration
+duffel:
+  api-key: ${DUFFEL_API_KEY:replace-with-your-api-key}
+  base-url: https://api.duffel.com/air
+  card-base-url: https://api.duffel.cards
+  links-base-url: https://api.duffel.com/links
+  version: v2
+  auth-token: ${DUFFEL_API_KEY:replace-with-your-api-key}

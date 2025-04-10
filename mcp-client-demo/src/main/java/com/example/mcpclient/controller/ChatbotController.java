@@ -1,6 +1,8 @@
 package com.example.mcpclient.controller;
 
+import com.example.common.config.WeatherMcpConfiguration;
 import com.example.mcpclient.service.McpClientService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
@@ -9,7 +11,9 @@ import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.ToolCallbackProvider;
+import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,10 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * REST controller for handling chatbot interactions with MCP tools.
@@ -38,7 +39,8 @@ public class ChatbotController {
     
     private final ChatClient chatClient;
     private final McpClientService mcpClientService;
-    
+    private final List<ToolCallbackProvider> toolCallbackProviders;
+
     @Value("${spring.ai.anthropic.model:claude-3-7-sonnet-20250219}")
     private String modelName;
     
@@ -47,18 +49,31 @@ public class ChatbotController {
      */
     public ChatbotController(ChatClient.Builder chatClientBuilder, 
                           @Autowired(required = false) @Qualifier("mcpToolCallbackProvider") ToolCallbackProvider toolCallbackProvider,
-                          McpClientService mcpClientService) {
+                          McpClientService mcpClientService,
+                             List<ToolCallbackProvider> toolCallbackProviders
+                             ) {
         
         // Build the ChatClient with tools if available
         ChatClient.Builder builder = chatClientBuilder;
-        
+
+
+        /*
         if (toolCallbackProvider != null) {
             logger.info("Adding MCP tool callback provider to ChatClient");
             builder = builder.defaultTools(toolCallbackProvider);
         } else {
             logger.warn("No MCP tool callback provider available, ChatClient will not have tool support");
+        }*/
+
+        if (toolCallbackProviders != null) {
+            logger.info("Adding MCP tool callback provider to ChatClient");
+            builder = builder.defaultTools(toolCallbackProviders.toArray(new ToolCallbackProvider[0]));
+        } else {
+            logger.warn("No MCP tool callback provider available, ChatClient will not have tool support");
         }
-        
+
+        this.toolCallbackProviders = toolCallbackProviders;
+
         this.chatClient = builder.build();
         this.mcpClientService = mcpClientService;
         
@@ -83,7 +98,7 @@ public class ChatbotController {
      * Start a new conversation with the AI model.
      */
     @PostMapping("/startConversation")
-    public ResponseEntity<Object> startConversation(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<Object> startConversation(@RequestBody Map<String, Object> request, HttpServletRequest httpRequest) {
         try {
             logger.info("Starting a new conversation with AI model");
             
@@ -116,11 +131,10 @@ public class ChatbotController {
             
             // Create prompt and get response
             Prompt prompt = new Prompt(aiMessages);
-            
             // Use the same pattern as the original implementation
-            ChatClient.CallResponseSpec responseSpec = chatClient.prompt(prompt).call();
+            ChatClient.CallResponseSpec responseSpec = chatClient.prompt(prompt).toolContext(Map.of("httpRequest",httpRequest)).call();
             String responseText = responseSpec.content();
-            
+
             // Format response for the frontend
             Map<String, Object> responseMap = new HashMap<>();
             responseMap.put("id", "claude-response-" + System.currentTimeMillis());
@@ -138,18 +152,30 @@ public class ChatbotController {
             return ResponseEntity.internalServerError().body(errorResponse);
         }
     }
-    
-    /**
+
+    /*
+    public ArrayList<ToolCallback> providerToolCallbacks(List<ToolCallbackProvider> toolCallbackProviders) {
+        ArrayList<ToolCallback> toolCallbacks = new ArrayList<>();
+
+        for (ToolCallbackProvider toolCallbackProvider : toolCallbackProviders) {
+
+            toolCallbacks.addAll((Collection<? extends ToolCallback>) Arrays.asList(toolCallbackProvider.getToolCallbacks()));
+        }
+        return toolCallbacks;
+
+    }
+
+     /*
      * Continue a conversation with the AI model.
      */
     @PostMapping("/continueConversation")
-    public ResponseEntity<Object> continueConversation(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<Object> continueConversation(@RequestBody Map<String, Object> request, HttpServletRequest httpRequest) {
         try {
             logger.info("Continuing conversation with AI model");
             
             // This is now the same as starting a conversation since Spring AI
             // handles the conversation state internally
-            return startConversation(request);
+            return startConversation(request, httpRequest);
         } 
         catch (Exception e) {
             logger.error("Error calling AI model: " + e.getMessage(), e);
