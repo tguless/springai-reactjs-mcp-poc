@@ -92,6 +92,36 @@ Key features:
    - Manages message history and displays AI responses
    - Shows available MCP tools in the sidebar
 
+## Intelligent Tool Resolution
+
+The client application implements an intelligent tool resolution approach that optimizes the interaction between the AI model and available tools:
+
+1. **Automatic Tool Resolution**
+   - The system can automatically identify which tools are relevant to a user query
+   - This is controlled by the `app.tools.autoResolve` property (default: true)
+   - Implemented via the `ToolResolverService` which analyzes user queries
+
+2. **Non-Verbose Initial Tool List**
+   - Instead of overwhelming the AI model with all available tools and their detailed schemas
+   - The system first provides a high-level list of available tools
+   - This minimizes token usage and improves model performance
+
+3. **Agent-Driven Tool Selection**
+   - Based on the user query, the AI agent can request specific tools it needs
+   - The `toolResolverService` identifies the most relevant tools for the current context
+   - Selected tools are stored in the session state for the conversation
+
+4. **Tool Deduplication**
+   - The system intelligently manages tool availability to prevent duplicates
+   - Filters out tools that are already provided by default providers
+   - Prevents errors like "Multiple tools with the same name" that could occur with overlapping tools
+
+This approach offers several benefits:
+- **Reduced token usage**: Only sending relevant tool definitions to the model
+- **Improved response quality**: The model can focus on relevant tools instead of parsing many options
+- **Better context management**: Tools can be dynamically added or removed as the conversation evolves
+- **Enhanced reliability**: Avoiding duplicate tool definitions prevents runtime errors
+
 ## Spring AI Integration
 
 This project leverages several key Spring AI features:
@@ -194,6 +224,10 @@ spring:
               url: http://localhost:8092/api
       server:
         enabled: false
+
+app:
+  tools:
+    autoResolve: true  # Enable automatic tool resolution based on user queries
 ```
 
 ## Conclusion
