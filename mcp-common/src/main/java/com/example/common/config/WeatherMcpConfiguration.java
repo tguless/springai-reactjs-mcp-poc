@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.net.http.HttpRequest;
 import java.util.List;
 
 /**
@@ -87,6 +86,7 @@ public class WeatherMcpConfiguration {
                 @ToolParam(description = "Response language (optional, default: en)") String language,
                 ToolContext context
         ) throws InterruptedException {
+            HttpServletRequest request = (HttpServletRequest) context.getContext().get("httpRequest");
             return service.getWeatherData(latitude, longitude, exclude, units, language);
         }
 
@@ -97,6 +97,7 @@ public class WeatherMcpConfiguration {
                 @ToolParam(description = "Response language (optional, default: en)") String language,
                 ToolContext context
         ) {
+            HttpServletRequest request = (HttpServletRequest) context.getContext().get("httpRequest");
             return service.getWeatherForCity(city, units, language);
         }
 
