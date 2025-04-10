@@ -66,3 +66,7 @@ duffel:
   links-base-url: https://api.duffel.com/links
   version: v2
   auth-token: ${DUFFEL_API_KEY:replace-with-your-api-key}
+
+app:
+  tools:
+    autoResolve: true  # Set to false to disable automatic tool resolution
