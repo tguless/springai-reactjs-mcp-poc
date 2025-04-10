@@ -46,6 +46,8 @@ public class ChatbotController {
     private final Map<String, ToolCallbackProvider> toolProviderMap = new HashMap<>();
     private final JwtTokenUtils jwtTokenUtils;
     private final ToolResolverService toolResolverService;
+    private final ToolCallbackProvider dateTimeToolProvider;
+    private final ToolCallbackProvider toolManagementProvider;
 
     @Value("${spring.ai.anthropic.model:claude-3-7-sonnet-20250219}")
     private String modelName;
@@ -70,6 +72,8 @@ public class ChatbotController {
         this.mcpClientService = mcpClientService;
         this.jwtTokenUtils = jwtTokenUtils;
         this.toolResolverService = toolResolverService;
+        this.dateTimeToolProvider = dateTimeToolProvider;
+        this.toolManagementProvider = toolManagementProvider;
 
         // Index all tools by name for easier selection
         if (toolCallbackProviders != null) {
@@ -199,9 +203,31 @@ public class ChatbotController {
             // Create chat client response spec with selected tools and context
             ChatClient.CallResponseSpec responseSpec;
             if (!selectedToolNames.isEmpty()) {
-                // Add selected tools to the chat client
+                // Create a set to track default tool names from providers that are already added
+                Set<String> defaultToolNames = new HashSet<>();
+                
+                // Collect tool names from default providers
+                if (dateTimeToolProvider != null) {
+                    for (Object callback : dateTimeToolProvider.getToolCallbacks()) {
+                        if (callback instanceof ToolCallback) {
+                            defaultToolNames.add(((ToolCallback) callback).getName());
+                        }
+                    }
+                }
+                
+                if (toolManagementProvider != null) {
+                    for (Object callback : toolManagementProvider.getToolCallbacks()) {
+                        if (callback instanceof ToolCallback) {
+                            defaultToolNames.add(((ToolCallback) callback).getName());
+                        }
+                    }
+                }
+                
+                // Add selected tools to the chat client, filtering out tools that are already
+                // provided by default providers
                 List<ToolCallback> selectedTools = selectedToolNames.stream()
                         .filter(allTools::containsKey)
+                        .filter(toolName -> !defaultToolNames.contains(toolName))
                         .map(allTools::get)
                         .collect(Collectors.toList());
 
