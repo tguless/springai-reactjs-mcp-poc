@@ -57,4 +57,4 @@ duffel:
 
 app:
   tools:
-    autoResolve: false  # Set to false to disable automatic tool resolution
+    autoResolve: true  # Set to false to disable automatic tool resolution
